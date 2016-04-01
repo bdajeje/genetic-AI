@@ -9,6 +9,7 @@ namespace models {
 Map::Map(unsigned int width, unsigned int height)
   : _width {static_cast<int>(width)}
   , _height {height}
+  , _bird_animation {"bird.png", 4, 100}
 {
   // Set backgrounds
   for(size_t i = 0; i < _backgrounds.size(); ++i)
@@ -20,9 +21,10 @@ Map::Map(unsigned int width, unsigned int height)
   }
 
   // Set bird sprite
-  _bird.setTexture( texture::TextureManager::get("bird.png") );
   _bird.setPosition(0, 310);
+  _bird_animation.setSprite(&_bird);
 
+  // Reset map data
   reset();
 }
 
@@ -40,6 +42,7 @@ void Map::update(const sf::Time& elapsed_time)
   }
 
   // Move bird
+  _bird_animation.update(elapsed_time);
   _bird.move(-move * _bird_speed_modificator, 0);
 
   // Bird goes out of screen, randomly re-place it
@@ -58,6 +61,10 @@ void Map::placeBird()
 
 void Map::updateHoles(float move)
 {
+  // Move holes
+  for( sf::Sprite& hole : _holes )
+    hole.move(-move, 0);
+
   // Check if most left hole is out of screen, if yes, remove it, and generate a new one
   sf::Sprite& hole = _holes.front();
   if(hole.getPosition().x < -hole.getGlobalBounds().width)
@@ -65,19 +72,18 @@ void Map::updateHoles(float move)
     _holes.pop_front();
     generateHole();
   }
-
-  // Move holes
-  for( sf::Sprite& hole : _holes )
-    hole.move(-move, 0);
 }
 
 void Map::generateHole()
 {
+  // Starting x position
+  const int x_margin = _holes.empty() ? _width : _holes.front().getPosition().x;
+
   // Create new hole
   _holes.emplace_back( texture::TextureManager::get("hole.png") );
   sf::Sprite& hole = _holes.back();
   const sf::FloatRect& bounds = hole.getGlobalBounds();
-  hole.move(_width + bounds.width, _height - bounds.height);
+  hole.setPosition(std::max(x_margin + utils::random(_min_distance_between_holes, _width), _width), _height - bounds.height);
 
   // Resize hole width randomly
   const float width_modificator = utils::random(10, 18) / 10;
@@ -148,7 +154,8 @@ void Map::reset()
   // Remove all holes
   _holes.clear();
 
-  // Add initial hole
+  // Generates two holes by default
+  generateHole();
   generateHole();
 
   // Re-place bird

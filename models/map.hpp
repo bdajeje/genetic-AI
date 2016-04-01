@@ -37,12 +37,16 @@ class Map final : public sf::Drawable
     std::array<sf::Sprite, 2> _backgrounds;
     std::list<sf::Sprite> _holes;
     sf::Sprite _bird;
+    graphics::Animation _bird_animation;
 
     // Pixels / ms
-    float _speed {0.3};
+    static constexpr float _speed {0.3};
 
     // Bird has to move faster than map, this multiplicator is added to its movement
-    static constexpr float _bird_speed_modificator {2};
+    static constexpr float _bird_speed_modificator {2.5};
+
+    // Minimum X distance between two holes
+    static constexpr float _min_distance_between_holes {300};
 };
 
 }
