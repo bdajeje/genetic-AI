@@ -12,7 +12,7 @@ class Game final
 {
   public:
 
-    Game(sf::RenderWindow& window, sf::Vector2u game_size, bool use_ai, float game_speed);
+    Game(sf::RenderWindow& window, sf::Vector2u game_size, bool use_ai, bool allow_draw);
 
     void start();
 
@@ -21,6 +21,9 @@ class Game final
     void restart();
     void saveScore();
     void updatePlayerState();
+    bool handleEvents();
+    void draw();
+    void updateModels();
 
   private:
 
@@ -34,7 +37,7 @@ class Game final
     bool _game_started {false};
     utils::time::Timer _timer;
     bool _use_ai;
-    float _game_speed;
+    bool _allow_draw;
 
     static const std::string _player_filepath;
 };
