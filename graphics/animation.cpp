@@ -4,11 +4,11 @@
 
 namespace graphics {
 
-Animation::Animation(const std::string& textures_filename, unsigned int texture_width, unsigned int texture_height, unsigned int sprite_time)
-  : _texture_width{texture_width}
-  , _texture_height{texture_height}
-  , _time_between_textures {sprite_time}
+Animation::Animation(const std::string& textures_filename, unsigned int nbr_sprites, unsigned int sprite_time)
+  : _time_between_textures {sprite_time}
   , _texture {texture::TextureManager::get(textures_filename)}
+  , _texture_width{ _texture.getSize().x / nbr_sprites }
+  , _texture_height{ _texture.getSize().y }
 {}
 
 void Animation::setSprite(sf::Sprite* sprite)

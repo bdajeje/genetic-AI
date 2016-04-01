@@ -12,7 +12,7 @@ class Animation final
 {
   public:
 
-    Animation(const std::string& textures_filename, unsigned int texture_width, unsigned int texture_height, unsigned int sprite_time);
+    Animation(const std::string& textures_filename, unsigned int nbr_sprites, unsigned int sprite_time);
 
     void update(const sf::Time& elapsed_time);
 
@@ -24,11 +24,11 @@ class Animation final
 
   private:
 
-    unsigned int _texture_width;
-    unsigned int _texture_height;
     unsigned int _elapsed_time {0}; // milliseconds
     unsigned int _time_between_textures; // milliseconds
     const sf::Texture& _texture;
+    unsigned int _texture_width;
+    unsigned int _texture_height;
     sf::Sprite* _sprite;
 };
 

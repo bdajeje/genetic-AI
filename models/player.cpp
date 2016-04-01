@@ -4,8 +4,8 @@ namespace models {
 
 Player::Player()
   : _target_y_position {_default_y_pos}
-  , _animation_up {"player.png", 60, 102, 200}
-  , _animation_down {"player_crouch.png", 60, 102, 200}
+  , _animation_up {"player.png", 3, 200}
+  , _animation_down {"player_crouch.png", 3, 200}
 {
   _sprite.setPosition( 50, _default_y_pos );
   standUp();
