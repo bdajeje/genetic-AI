@@ -1,6 +1,7 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
+#include "ai/ai.hpp"
 #include "models/map.hpp"
 #include "models/hud.hpp"
 #include "models/player.hpp"
@@ -18,12 +19,14 @@ class Game final
 
   private:
 
+    bool isAI() const { return _ai != nullptr; }
     void restart();
     void saveScore();
     void updatePlayerState();
     bool handleEvents();
     void draw();
     void updateModels();
+    void handleAI();
 
   private:
 
@@ -36,7 +39,7 @@ class Game final
     uint _highest_score {0};
     bool _game_started {false};
     utils::time::Timer _timer;
-    bool _use_ai;
+    AI::AI* _ai {nullptr};
     bool _allow_draw;
 
     static const std::string _player_filepath;

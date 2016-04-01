@@ -12,7 +12,6 @@ Game::Game(sf::RenderWindow& window, sf::Vector2u game_size, bool use_ai, bool a
   : _window {window}
   , _map {game_size.x, game_size.y}
   , _hud {game_size.x, game_size.y}
-  , _use_ai {use_ai}
   , _allow_draw {allow_draw}
 {
   // Read highest score
@@ -28,7 +27,12 @@ Game::Game(sf::RenderWindow& window, sf::Vector2u game_size, bool use_ai, bool a
     }
   }
 
+  // Set highest score
   _hud.setHighestScore(_highest_score);
+
+  // Create AI
+  if(use_ai)
+    _ai = new AI::AI;
 }
 
 void Game::restart()
@@ -77,7 +81,7 @@ bool Game::handleEvents()
       return false;
     }
     // If AI, don't handle other events
-    else if(_use_ai)
+    else if(isAI())
       break;
 
     // Remove compiler warnings about some enumeration values not handled in switch
@@ -124,7 +128,8 @@ void Game::updateModels()
   // Is there collision
   if(_map.isCollision(_player))
   {
-    if(_use_ai)
+    // Game over - if AI restart directly
+    if(isAI())
       restart();
     else
     {
@@ -149,7 +154,7 @@ void Game::draw()
 void Game::start()
 {
   // If AI, start game directly
-  if(_use_ai)
+  if(isAI())
     restart();
 
   while(_window.isOpen())
@@ -157,11 +162,35 @@ void Game::start()
     if(!handleEvents())
       return;
 
+    if(isAI())
+      handleAI();
+
     if(_game_started)
       updateModels();
 
     draw();
   }
+}
+
+void Game::handleAI()
+{
+  const float limit           = _player.getPosition().x + _player.getWidth();
+  const sf::Sprite& next_hole = _map.getNextHole(limit);
+  const float bird_x_pos      = _map.getBirdXPos();
+
+  const auto outputs = _ai->inputs( next_hole.getGlobalBounds().width,
+                                    next_hole.getPosition().x - limit,
+                                    bird_x_pos - limit );
+
+  // AI wants to jump
+  if( std::get<0>(outputs) )
+    _player.jump();
+
+  // AI wants to crouch
+  if( std::get<1>(outputs) )
+    _player.standDown();
+  else
+    _player.standUp();
 }
 
 }

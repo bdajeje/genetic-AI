@@ -14,7 +14,8 @@ SOURCES += main.cpp \
     utils/timer.cpp \
     graphics/animation.cpp \
     utils/file.cpp \
-    models/game.cpp
+    models/game.cpp \
+    ai/ai.cpp
 
 LIBS += -lsfml-graphics -lsfml-window -lsfml-system \
         -lboost_filesystem -lboost_system
@@ -31,4 +32,5 @@ HEADERS += \
     graphics/animation.hpp \
     utils/file.hpp \
     models/game.hpp \
-    utils/random.hpp
+    utils/random.hpp \
+    ai/ai.hpp

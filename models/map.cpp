@@ -162,4 +162,17 @@ void Map::reset()
   placeBird();
 }
 
+const sf::Sprite& Map::getNextHole(float limit) const
+{
+  // Since we only have two holes in this game,
+  // check if first hole respects the given limit,
+  // otherwise returns the second hole.
+
+  const sf::Sprite& first_hole = _holes.front();
+  if( first_hole.getPosition().x > limit )
+    return first_hole;
+
+  return _holes.back();
+}
+
 }

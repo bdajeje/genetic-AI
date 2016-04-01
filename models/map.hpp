@@ -21,6 +21,17 @@ class Map final : public sf::Drawable
 
     bool isCollision(const Player& player) const;
 
+    /*! Get next hole after a x distance
+     * \param limit - find first hole after this X limit
+     * \returns hole sprite
+     */
+    const sf::Sprite& getNextHole(float limit) const;
+
+    /*! Get bird x position
+     * \returns bird x position
+     */
+    float getBirdXPos() const { return _bird.getPosition().x; }
+
   private:
 
     void updateHoles(float move);
@@ -28,6 +39,7 @@ class Map final : public sf::Drawable
     void placeBird();
     bool isBirdCollision(const Player& player) const;
     bool isHoleCollision(const Player& player) const;
+
     static bool isCollide(float a_left, float a_right, float b_left, float b_right);
 
   private:
