@@ -8,7 +8,7 @@ namespace models {
 
 const std::string Game::_player_filepath {"player/highest"};
 
-Game::Game(sf::RenderWindow& window, sf::Vector2u game_size, bool use_ai, bool allow_draw)
+Game::Game(sf::RenderWindow* window, sf::Vector2u game_size, bool use_ai, bool allow_draw)
   : _window {window}
   , _map {game_size.x, game_size.y, _player.getPosition().x + _player.getWidth()}
   , _hud {game_size.x, game_size.y}
@@ -72,7 +72,7 @@ void Game::updatePlayerState()
 bool Game::handleEvents()
 {
   sf::Event event;
-  while(_window.pollEvent(event))
+  while(_window->pollEvent(event))
   {
     // Close program
     if( event.type == sf::Event::Closed )
@@ -144,11 +144,11 @@ void Game::draw()
 {
   static const sf::Color background_color {0, 0, 0};
 
-  _window.clear(background_color);
-  _window.draw(_map);
-  _window.draw(_player);
-  _window.draw(_hud);
-  _window.display();
+  _window->clear(background_color);
+  _window->draw(_map);
+  _window->draw(_player);
+  _window->draw(_hud);
+  _window->display();
 }
 
 void Game::start()
@@ -157,7 +157,7 @@ void Game::start()
   if(isAI())
     restart();
 
-  while(_window.isOpen())
+  while(_window->isOpen())
   {
     if(!handleEvents())
       return;

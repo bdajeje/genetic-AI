@@ -34,7 +34,7 @@ int main(int argc, char** argv)
   font::FontManager::init("resources/fonts/");
 
   // Game loop
-  models::Game game {window, window.getSize(), std::get<0>(args), std::get<1>(args)};
+  models::Game game {&window, window.getSize(), std::get<0>(args), std::get<1>(args)};
   game.start();
 
   return EXIT_SUCCESS;
