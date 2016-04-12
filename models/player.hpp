@@ -25,7 +25,7 @@ class Player final : public sf::Drawable
     bool isJumping() const;
 
     const sf::Vector2f& getPosition() const { return _sprite.getPosition(); }
-    uint getWidth() const { return _sprite.getGlobalBounds().width; }
+    unsigned int getWidth() const { return _sprite.getGlobalBounds().width; }
 
   private:
 

@@ -6,9 +6,10 @@
 
 namespace models {
 
-Map::Map(unsigned int width, unsigned int height)
+Map::Map(unsigned int width, unsigned int height, float player_front_x)
   : _width {static_cast<int>(width)}
   , _height {height}
+  , _player_x {player_front_x}
   , _bird_animation {"bird.png", 4, 100}
 {
   // Set backgrounds
@@ -56,7 +57,30 @@ void Map::update(const sf::Time& elapsed_time)
 
 void Map::placeBird()
 {
-  _bird.move(utils::random(_width, _width * 4), 0);
+  // Randomly place bird (move it out of screen on X abscisse)
+  sf::Vector2f bird_new_pos = _bird.getPosition();
+  bird_new_pos.x += utils::random(_width, _width * 4);
+
+  // When placing a bird, we need to take care the bird
+  // and any hole don't arrive on the player at the same time
+  for( sf::Sprite& hole : _holes )
+  {
+    const float distance_player_hole = hole.getPosition().x - _player_x;
+
+    // Ignore already jumped hole
+    if(distance_player_hole < 0)
+      continue;
+
+    // Apply bird speed modificator to calculation to be able to compare bird/hole distances to player
+    const float distance_player_bird = (bird_new_pos.x - _player_x) / _bird_speed_modificator;
+
+    // This means bird's miss placed, move it more to the right (increasing x position)
+    if( distance_player_hole < distance_player_bird )
+      bird_new_pos.x += (distance_player_bird - distance_player_hole) + hole.getGlobalBounds().width;
+  }
+
+  // Finaly move bird to new position
+  _bird.setPosition(bird_new_pos);
 }
 
 void Map::updateHoles(float move)

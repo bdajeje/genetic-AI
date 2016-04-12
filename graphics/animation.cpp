@@ -40,7 +40,7 @@ void Animation::updateSprite()
     return;
 
   int texture_nbr = _elapsed_time / _time_between_textures;
-  uint x_offset = (texture_nbr * _texture_width);
+  unsigned int x_offset = (texture_nbr * _texture_width);
 
   if(x_offset >= _sprite->getTexture()->getSize().x)
   {

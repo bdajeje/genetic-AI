@@ -3,7 +3,7 @@
 namespace utils {
 namespace graphics{
 
-void centerPosition(sf::Text& text, uint total_width, uint total_height)
+void centerPosition(sf::Text& text, unsigned int total_width, unsigned int total_height)
 {
   const sf::FloatRect bounds = text.getGlobalBounds();
   text.setPosition( (total_width - bounds.width) / 2, (total_height - bounds.height) / 2 );

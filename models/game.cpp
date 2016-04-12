@@ -10,7 +10,7 @@ const std::string Game::_player_filepath {"player/highest"};
 
 Game::Game(sf::RenderWindow& window, sf::Vector2u game_size, bool use_ai, bool allow_draw)
   : _window {window}
-  , _map {game_size.x, game_size.y}
+  , _map {game_size.x, game_size.y, _player.getPosition().x + _player.getWidth()}
   , _hud {game_size.x, game_size.y}
   , _allow_draw {allow_draw}
 {
@@ -50,7 +50,7 @@ void Game::restart()
 
 void Game::saveScore()
 {
-  const uint score = _hud.getScore();
+  const unsigned int score = _hud.getScore();
   if( score > _highest_score )
   {
     _highest_score = score;

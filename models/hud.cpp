@@ -46,7 +46,7 @@ HUD::HUD( unsigned int window_width, unsigned int window_height )
   utils::graphics::centerPosition(_game_over, window_width, 320);
 }
 
-void HUD::setHighestScore(uint value)
+void HUD::setHighestScore(unsigned int value)
 {
   _highest_score.setString( scoreString(std::to_string(value)) );
 }
@@ -56,7 +56,7 @@ void HUD::update(const sf::Time& elapsed_time)
   _elapsed_time += elapsed_time.asMilliseconds();
 
   // Update score text if needed
-  const uint new_score = getScore();
+  const unsigned int new_score = getScore();
   if( isSuperior(new_score, _score) )
   {
     _score.setString( scoreString(std::to_string(new_score)) );
@@ -66,12 +66,12 @@ void HUD::update(const sf::Time& elapsed_time)
   }
 }
 
-uint HUD::getScore() const
+unsigned int HUD::getScore() const
 {
   return _elapsed_time / 350;
 }
 
-bool HUD::isSuperior(uint value, const sf::Text& text)
+bool HUD::isSuperior(unsigned int value, const sf::Text& text)
 {
   return value > std::stoul(text.getString().toAnsiString());
 }

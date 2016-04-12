@@ -32,11 +32,11 @@ class Game final
 
     sf::RenderWindow& _window;
 
+    Player _player; // Player has to be initialed before map (map needs player x position)
     Map _map;
-    Player _player;
     HUD _hud;
 
-    uint _highest_score {0};
+    unsigned int _highest_score {0};
     bool _game_started {false};
     utils::time::Timer _timer;
     AI::AI* _ai {nullptr};
