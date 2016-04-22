@@ -13,7 +13,10 @@ class Map final : public sf::Drawable
 {
   public:
 
-    Map(unsigned int width, unsigned int height);
+    /*! Constructor
+     *  \param player_front_x - X position of the front of the player (player x pos + player width)
+     */
+    Map(unsigned int width, unsigned int height, float player_front_x);
 
     void update(const sf::Time& elapsed_time);
     void draw(sf::RenderTarget& target, sf::RenderStates states) const;
@@ -46,6 +49,7 @@ class Map final : public sf::Drawable
 
     int _width; // we need an int here to be able to get minus _width
     unsigned int _height;
+    float _player_x;
     std::array<sf::Sprite, 2> _backgrounds;
     std::list<sf::Sprite> _holes;
     sf::Sprite _bird;

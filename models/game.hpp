@@ -13,7 +13,7 @@ class Game final
 {
   public:
 
-    Game(sf::RenderWindow& window, sf::Vector2u game_size, bool use_ai, bool allow_draw);
+    Game(sf::RenderWindow* window, sf::Vector2u game_size, bool use_ai, bool allow_draw);
 
     void start();
 
@@ -30,13 +30,13 @@ class Game final
 
   private:
 
-    sf::RenderWindow& _window;
+    sf::RenderWindow* _window;
 
+    Player _player; // Player has to be initialed before map (map needs player x position)
     Map _map;
-    Player _player;
     HUD _hud;
 
-    uint _highest_score {0};
+    unsigned int _highest_score {0};
     bool _game_started {false};
     utils::time::Timer _timer;
     AI::AI* _ai {nullptr};

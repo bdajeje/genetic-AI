@@ -17,14 +17,14 @@ class HUD final : public sf::Drawable
 
     void setDrawStarting(bool value) { _draw_starting = value; }
     void setDrawGameOver(bool value) { _draw_game_over = value; }
-    void setHighestScore(uint value);
+    void setHighestScore(unsigned int value);
 
-    uint getScore() const;
+    unsigned int getScore() const;
 
   private:
 
-    static std::string scoreString(const std::__cxx11::string& input);
-    static bool isSuperior(uint value, const sf::Text& text);
+    static std::string scoreString(const std::string& input);
+    static bool isSuperior(unsigned int value, const sf::Text& text);
 
   private:
 
@@ -35,7 +35,7 @@ class HUD final : public sf::Drawable
     sf::Text _score;
     sf::Text _game_over;
     sf::Text _starting;
-    uint _elapsed_time {0};
+    unsigned int _elapsed_time {0};
 };
 
 }
