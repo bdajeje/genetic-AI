@@ -76,7 +76,7 @@ void Map::placeBird()
 
     // This means bird's miss placed, move it more to the right (increasing x position)
     if( distance_player_hole < distance_player_bird )
-      bird_new_pos.x += (distance_player_bird - distance_player_hole) + hole.getGlobalBounds().width;
+      bird_new_pos.x += (distance_player_bird - distance_player_hole) + 2 * hole.getGlobalBounds().width;
   }
 
   // Finaly move bird to new position
