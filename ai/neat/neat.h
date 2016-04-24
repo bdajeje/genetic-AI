@@ -69,6 +69,7 @@ namespace NEAT {
 	extern int babies_stolen; // The number of babies to siphon off to the champions 
 
 	extern int num_runs; //number of times to run experiment
+	extern int num_gens; //number of generations to evolve
 
 	//extern MRandomR250 NEATRandGen; // Random number generator; can pass seed value as argument
 

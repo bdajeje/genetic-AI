@@ -36,8 +36,10 @@ int main(int argc, char** argv)
   // Game loop
   models::Game game {&window, window.getSize(), std::get<0>(args), std::get<1>(args)};
 
-  if ( std::get<0>( args ) )
+  if ( std::get<0>( args ) ) {
+    std::cerr << "[+ 0] (main) game.startAI()" << std::endl;
     game.startAI();
+  }
   else
     game.start();
 

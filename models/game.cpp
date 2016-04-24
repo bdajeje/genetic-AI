@@ -164,19 +164,24 @@ void Game::startAI()
 
   // Variables
   int genome_id{};
-  int n_generations{ 100 };
   std::string s_tmp{};
+  std::string path_genes{ "ai/mario_genes" };
+  std::string path_params{ "ai/mario_params.ne" };
   NEAT::Population *pop{};
   NEAT::Genome *start_genome{};
 
   // Load parameter file 
-  if ( NEAT::load_neat_params( "mario_params.ne", true ) == false )
+  if ( NEAT::load_neat_params( path_params.c_str(), true ) == false ) {
+    std::cerr << "[- 1] (game) couldn't find file: " << path_params << std::endl; 
     return;
+  }
 
   // Read initial genome
-  std::ifstream f_genes( "mario_genes", std::ios::in );
-  if ( f_genes.is_open() == false )
+  std::ifstream f_genes( path_genes, std::ios::in );
+  if ( f_genes.is_open() == false ) {
+    std::cerr << "[- 1] (game) couldn't find file: " << path_genes << std::endl; 
     return;
+  }
   f_genes >> s_tmp >> genome_id;
   start_genome = new NEAT::Genome( genome_id, f_genes );
   f_genes.close();
@@ -191,7 +196,7 @@ void Game::startAI()
     pop->verify();
 
     // Evolve generations
-    for ( int i_gens{ 1 } ; i_gens <= n_generations ; ++i_gens ) {
+    for ( int i_gens{ 1 } ; i_gens <= NEAT::num_gens ; ++i_gens ) {
       std::vector<NEAT::Organism*>::iterator it_orgs;
       //std::vector<NEAT::Species*>::iterator it_specs;
 
@@ -202,6 +207,7 @@ void Game::startAI()
          * Play game here
          */
         int fitness{};
+        restart();
 
         // Game loop
 			  while( _game_started ) {
