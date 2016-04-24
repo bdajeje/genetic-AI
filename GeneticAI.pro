@@ -20,6 +20,7 @@ SOURCES += main.cpp \
     ai/neat/genome.cpp \
     ai/neat/innovation.cpp \
     ai/neat/link.cpp \
+    ai/neat/neat.cpp \
     ai/neat/network.cpp \
     ai/neat/nnode.cpp \
     ai/neat/organism.cpp \
@@ -48,6 +49,7 @@ HEADERS += \
     ai/neat/genome.h \
     ai/neat/innovation.h \
     ai/neat/link.h \
+    ai/neat/neat.h \
     ai/neat/network.h \
     ai/neat/nnode.h \
     ai/neat/organism.h \
