@@ -55,7 +55,7 @@ class Player final : public sf::Drawable
     static constexpr float _default_y_pos {340};
 
     // Jump height
-    static constexpr float _jump_height {150};
+    static constexpr float _jump_height {130};
 };
 
 }

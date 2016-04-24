@@ -2,6 +2,7 @@
 #define MAP_HPP
 
 #include <list>
+#include <iostream>
 
 #include <SFML/Graphics.hpp>
 
@@ -62,7 +63,7 @@ class Map final : public sf::Drawable
     static constexpr float _bird_speed_modificator {2.5};
 
     // Minimum X distance between two holes
-    static constexpr float _min_distance_between_holes {300};
+    static constexpr float _min_distance_between_holes {600};
 };
 
 }

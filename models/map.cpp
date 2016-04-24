@@ -57,6 +57,9 @@ void Map::update(const sf::Time& elapsed_time)
 
 void Map::placeBird()
 {
+  // Size of landing zone after jumping over a hole
+  int hole_safe_zone {300};
+  
   // Randomly place bird (move it out of screen on X abscisse)
   sf::Vector2f bird_new_pos = _bird.getPosition();
   bird_new_pos.x += utils::random(_width, _width * 4);
@@ -72,11 +75,28 @@ void Map::placeBird()
       continue;
 
     // Apply bird speed modificator to calculation to be able to compare bird/hole distances to player
-    const float distance_player_bird = (bird_new_pos.x - _player_x) / _bird_speed_modificator;
+    float distance_player_bird = (bird_new_pos.x - _player_x) / _bird_speed_modificator;
 
-    // This means bird's miss placed, move it more to the right (increasing x position)
-    if( distance_player_hole < distance_player_bird )
-      bird_new_pos.x += (distance_player_bird - distance_player_hole) + 2 * hole.getGlobalBounds().width;
+    // If bird and hole almost arrive at the same time (bird a bit first), make sure bird comes a bit before
+    if ( distance_player_hole >= distance_player_bird && distance_player_hole - distance_player_bird < _bird.getGlobalBounds().width * 1.5 ) {
+      int decrease = _bird.getGlobalBounds().width * 2.25;
+      
+      std::cerr << "Bird too close 1, reducing x by " << decrease << std::endl;
+      
+      bird_new_pos.x -= decrease;
+      distance_player_bird -= decrease; 
+    }
+
+    // If bird comes over a hole (jump or landing phase), make sure it comes later
+    if ( distance_player_bird >= distance_player_hole && distance_player_bird - distance_player_hole < hole_safe_zone ) {
+      int increase = _bird_speed_modificator * ( hole_safe_zone - distance_player_bird + distance_player_hole );
+      increase = std::max( std::min( increase, 550 ), 100 );
+
+      std::cerr << "Bird too close 2, increasing x by " << increase << ", diff was " << distance_player_bird - distance_player_hole;
+      std::cerr << ", hole width is " << hole.getGlobalBounds().width << std::endl;
+
+      bird_new_pos.x += increase; 
+    }
   }
 
   // Finaly move bird to new position
