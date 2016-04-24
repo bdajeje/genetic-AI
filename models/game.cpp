@@ -1,9 +1,5 @@
 #include "game.hpp"
 
-#include <iostream>
-
-#include "utils/file.hpp"
-
 namespace models {
 
 const std::string Game::_player_filepath {"player/highest"};
@@ -115,7 +111,7 @@ bool Game::handleEvents()
   return true;
 }
 
-void Game::updateModels()
+int Game::updateModels()
 {
   // Get elapsed time since last update
   const sf::Time elapsed_time = _timer.restart();
@@ -128,16 +124,11 @@ void Game::updateModels()
   // Is there collision
   if(_map.isCollision(_player))
   {
-    // Game over - if AI restart directly
-    if(isAI())
-      restart();
-    else
-    {
-      _game_started = false;
-      _hud.setDrawGameOver(true);
-      _hud.setDrawStarting(true);
-    }
+    _game_started = false;
+    _hud.setDrawGameOver(true);
+    _hud.setDrawStarting(true);
   }
+  return _hud.getScore(); 
 }
 
 void Game::draw()
@@ -153,17 +144,10 @@ void Game::draw()
 
 void Game::start()
 {
-  // If AI, start game directly
-  if(isAI())
-    restart();
-
   while(_window->isOpen())
   {
     if(!handleEvents())
       return;
-
-    if(isAI())
-      handleAI();
 
     if(_game_started)
       updateModels();
@@ -172,22 +156,120 @@ void Game::start()
   }
 }
 
-void Game::handleAI()
+void Game::startAI()
 {
+  /*
+   * Initialize NEAT environment
+   */
+
+  // Variables
+  int genome_id{};
+  int n_generations{ 100 };
+  std::string s_tmp{};
+  NEAT::Population *pop{};
+  NEAT::Genome *start_genome{};
+
+  // Load parameter file 
+  if ( NEAT::load_neat_params( "mario_params.ne", true ) == false )
+    return;
+
+  // Read initial genome
+  std::ifstream f_genes( "mario_genes", std::ios::in );
+  if ( f_genes.is_open() == false )
+    return;
+  f_genes >> s_tmp >> genome_id;
+  start_genome = new NEAT::Genome( genome_id, f_genes );
+  f_genes.close();
+
+  /*
+   * Start learning / playing
+   */
+
+  // Restart experiment multiple times
+  for ( int i_runs{} ; i_runs < NEAT::num_runs ; ++i_runs ) {
+    pop = new NEAT::Population( start_genome, NEAT::pop_size );
+    pop->verify();
+
+    // Evolve generations
+    for ( int i_gens{ 1 } ; i_gens <= n_generations ; ++i_gens ) {
+      std::vector<NEAT::Organism*>::iterator it_orgs;
+      //std::vector<NEAT::Species*>::iterator it_specs;
+
+      // Try out each organism (neural network) 
+      for ( it_orgs = ( pop->organisms ).begin() ; it_orgs != ( pop->organisms ).end() ; ++it_orgs ) {
+        
+        /*
+         * Play game here
+         */
+        int fitness{};
+
+        // Game loop
+			  while( _game_started ) {
+			    handleAI( *it_orgs );
+          fitness = updateModels();
+			    draw();
+			  }
+        
+        // Save organism's fitness (game score)
+        ( *it_orgs )->fitness = fitness;
+
+        // Keep checking if the user hasn't closed the game
+        if ( _window->isOpen() == false ) {
+          delete pop;
+          return;
+        }
+
+      }
+
+      // Output results every couple of generations
+      //if ( i_gens % NEAT::print_every == 0 )
+        //pop->print_to_file_by_species( "gen_" + std::to_string( i_gens ) );
+
+      // Generate next generation
+      pop->epoch( i_gens );
+    }
+
+    delete pop;
+  }
+ 
+
+}
+
+void Game::handleAI( NEAT::Organism *org )
+{
+  const double threshold_jump{ 0.55 }, threshold_crouch{ 0.45 };
   const float limit           = _player.getPosition().x + _player.getWidth();
   const sf::Sprite& next_hole = _map.getNextHole(limit);
   const float bird_x_pos      = _map.getBirdXPos();
 
-  const auto outputs = _ai->inputs( next_hole.getGlobalBounds().width,
-                                    next_hole.getPosition().x - limit,
-                                    bird_x_pos - limit );
+  double output;
+  double inputs[] = {
+    next_hole.getGlobalBounds().width,
+    next_hole.getPosition().x - limit,
+    bird_x_pos - limit
+  };
 
-  // AI wants to jump
-  if( std::get<0>(outputs) )
+  /*
+   * Use neural network
+   */
+
+  // Send inputs to network
+  org->net->load_sensors( inputs );
+
+  // Activate network
+  org->net->activate();
+
+  // Fetch output
+  output = ( *org->net->outputs.begin() )->activation;
+  
+
+  /*
+   * Play next move
+   */
+  
+  if( output > threshold_jump )
     _player.jump();
-
-  // AI wants to crouch
-  if( std::get<1>(outputs) )
+  else if( output < threshold_crouch )
     _player.standDown();
   else
     _player.standUp();
