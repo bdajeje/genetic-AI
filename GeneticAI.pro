@@ -15,7 +15,6 @@ SOURCES += main.cpp \
     graphics/animation.cpp \
     utils/file.cpp \
     models/game.cpp \
-    ai/ai.cpp \
     ai/neat/gene.cpp \
     ai/neat/genome.cpp \
     ai/neat/innovation.cpp \
@@ -44,7 +43,6 @@ HEADERS += \
     utils/file.hpp \
     models/game.hpp \
     utils/random.hpp \
-    ai/ai.hpp \
     ai/neat/gene.h \
     ai/neat/genome.h \
     ai/neat/innovation.h \

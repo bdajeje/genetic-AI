@@ -6,7 +6,6 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
-#include "ai/ai.hpp"
 #include "ai/neat/neat.h"
 #include "ai/neat/genome.h"
 #include "ai/neat/population.h"
@@ -32,7 +31,7 @@ class Game final
 
   private:
 
-    bool isAI() const { return _ai != nullptr; }
+    bool isAI() const { return _use_ai; }
     void restart();
     void saveScore();
     void updatePlayerState();
@@ -52,7 +51,7 @@ class Game final
     unsigned int _highest_score {0};
     bool _game_started {false};
     utils::time::Timer _timer;
-    AI::AI* _ai {nullptr};
+    bool _use_ai{ false };
     bool _allow_draw;
 
     static const std::string _player_filepath;

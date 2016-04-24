@@ -8,6 +8,7 @@ Game::Game(sf::RenderWindow* window, sf::Vector2u game_size, bool use_ai, bool a
   : _window {window}
   , _map {game_size.x, game_size.y, _player.getPosition().x + _player.getWidth()}
   , _hud {game_size.x, game_size.y}
+  , _use_ai { use_ai }
   , _allow_draw {allow_draw}
 {
   // Read highest score
@@ -25,10 +26,6 @@ Game::Game(sf::RenderWindow* window, sf::Vector2u game_size, bool use_ai, bool a
 
   // Set highest score
   _hud.setHighestScore(_highest_score);
-
-  // Create AI
-  if(use_ai)
-    _ai = new AI::AI;
 }
 
 void Game::restart()
