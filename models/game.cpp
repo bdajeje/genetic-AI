@@ -183,6 +183,7 @@ void Game::startAI()
   start_genome = new NEAT::Genome( genome_id, f_genes );
   f_genes.close();
 
+
   /*
    * Start learning / playing
    */
@@ -203,13 +204,22 @@ void Game::startAI()
         /*
          * Play game here
          */
+  
         int fitness{};
         restart();
 
         // Game loop
 			  while( _game_started ) {
+          // With AI, the only user event to handle is "close window"
+          if ( handleEvents() == false ) {
+            delete pop;
+            return;
+          }
+          // Sends inputs to neural network and applies corresponding action
 			    handleAI( *it_orgs );
+          // Score is updated until game is lost
           fitness = updateModels();
+          // Nothing interesting to comment here
 			    draw();
 			  }
         
