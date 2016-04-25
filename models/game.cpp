@@ -183,7 +183,6 @@ void Game::startAI()
   start_genome = new NEAT::Genome( genome_id, f_genes );
   f_genes.close();
 
-
   /*
    * Start learning / playing
    */
@@ -193,10 +192,20 @@ void Game::startAI()
     pop = new NEAT::Population( start_genome, NEAT::pop_size );
     pop->verify();
 
+    // Create directory for logging
+    time_t now = time(0);
+    char log_dir[80];
+    
+    strftime( log_dir, sizeof( log_dir ), "ai/log.%Y-%m-%d.%X", localtime( &now ) );
+    if ( boost::filesystem::create_directories( log_dir ) == false )
+      std::cerr << "[- 2] (game) wasn't able to create logging directory: " << log_dir << std::endl;
+    else
+      std::cerr << "[+ 2] (game) created logging directory: " << log_dir << std::endl;
+
     // Evolve generations
     for ( int i_gens{ 1 } ; i_gens <= NEAT::num_gens ; ++i_gens ) {
+      int gen_record{};
       std::vector<NEAT::Organism*>::iterator it_orgs;
-      //std::vector<NEAT::Species*>::iterator it_specs;
 
       // Try out each organism (neural network) 
       for ( it_orgs = ( pop->organisms ).begin() ; it_orgs != ( pop->organisms ).end() ; ++it_orgs ) {
@@ -226,6 +235,9 @@ void Game::startAI()
         // Save organism's fitness (game score)
         ( *it_orgs )->fitness = fitness;
 
+        if ( fitness > gen_record )
+          gen_record = fitness;
+
         // Keep checking if the user hasn't closed the game
         if ( _window->isOpen() == false ) {
           delete pop;
@@ -235,8 +247,11 @@ void Game::startAI()
       }
 
       // Output results every couple of generations
-      //if ( i_gens % NEAT::print_every == 0 )
-        //pop->print_to_file_by_species( "gen_" + std::to_string( i_gens ) );
+      if ( gen_record > _highest_score || i_gens % NEAT::print_every == 0 ) {
+        char tmp[50];
+        sprintf( tmp, "%s/gen_%d", log_dir, i_gens );
+        pop->print_to_file_by_species( tmp );
+      }
 
       // Generate next generation
       pop->epoch( i_gens );
