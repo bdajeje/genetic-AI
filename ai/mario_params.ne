@@ -31,4 +31,4 @@ newlink_tries 20
 print_every 5
 babies_stolen 0
 num_runs 1
-num_gens 60
+num_gens 40

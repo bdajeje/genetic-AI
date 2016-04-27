@@ -190,6 +190,8 @@ void Game::startAI()
   // Restart experiment multiple times
   for ( int i_runs{} ; i_runs < NEAT::num_runs ; ++i_runs ) {
     pop = new NEAT::Population( start_genome, NEAT::pop_size );
+    // To load specific genome, comment previous line and use following one instead
+    //pop = new NEAT::Population( start_genome, 1, 0 );
     pop->verify();
 
     // Create directory for logging
@@ -218,19 +220,19 @@ void Game::startAI()
         restart();
 
         // Game loop
-			  while( _game_started ) {
+		while( _game_started ) {
           // With AI, the only user event to handle is "close window"
           if ( handleEvents() == false ) {
             delete pop;
             return;
           }
           // Sends inputs to neural network and applies corresponding action
-			    handleAI( *it_orgs );
+		  handleAI( *it_orgs );
           // Score is updated until game is lost
           fitness = updateModels();
           // Nothing interesting to comment here
-			    draw();
-			  }
+		  draw();
+		}
         
         // Save organism's fitness (game score)
         ( *it_orgs )->fitness = fitness;

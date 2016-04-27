@@ -81,7 +81,7 @@ void Map::placeBird()
     if ( distance_player_hole >= distance_player_bird && distance_player_hole - distance_player_bird < _bird.getGlobalBounds().width * 1.5 ) {
       int decrease = _bird.getGlobalBounds().width * 2.25;
       
-      std::cerr << "Bird too close 1, reducing x by " << decrease << std::endl;
+      //std::cerr << "Bird too close 1, reducing x by " << decrease << std::endl;
       
       bird_new_pos.x -= decrease;
       distance_player_bird -= decrease; 
@@ -92,8 +92,8 @@ void Map::placeBird()
       int increase = _bird_speed_modificator * ( hole_safe_zone - distance_player_bird + distance_player_hole );
       increase = std::max( std::min( increase, 550 ), 100 );
 
-      std::cerr << "Bird too close 2, increasing x by " << increase << ", diff was " << distance_player_bird - distance_player_hole;
-      std::cerr << ", hole width is " << hole.getGlobalBounds().width << std::endl;
+      //std::cerr << "Bird too close 2, increasing x by " << increase << ", diff was " << distance_player_bird - distance_player_hole;
+      //std::cerr << ", hole width is " << hole.getGlobalBounds().width << std::endl;
 
       bird_new_pos.x += increase; 
     }

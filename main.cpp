@@ -23,7 +23,7 @@ int main(int argc, char** argv)
   const auto args = parseArgs(argc, argv);
 
   // Create window
-  sf::RenderWindow window(sf::VideoMode(1024, 512), "AI Chrome Easter Game");
+  sf::RenderWindow window(sf::VideoMode(1024, 512), "NEAT Ninja Mario");
   window.setFramerateLimit(60);
 
   // Init random
