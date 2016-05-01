@@ -1,26 +1,44 @@
 #include <iostream>
 
 #include <SFML/Graphics.hpp>
+#include <boost/program_options.hpp>
 
 #include "managers/fontmanager.hpp"
 #include "managers/texturemanager.hpp"
 #include "models/game.hpp"
 
-/*! Parse command line arguments
- * \returns first arg  - use AI or not
- *          second arg - use graphic mode or not
- */
-std::tuple<bool, bool> parseArgs(int argc, char** argv)
-{
-  const bool use_ai       = ( argc > 1 && std::string(argv[1]) == "1" );
-  const bool use_graphics = ( argc > 2 && std::string(argv[2]) == "1" );
-
-  return std::make_tuple(use_ai, use_graphics);
-}
-
 int main(int argc, char** argv)
 {
-  const auto args = parseArgs(argc, argv);
+
+  /*
+   * Handle command line arguments
+   */
+
+  bool use_ai {false}, nop_gene {false}, no_log {false};
+
+  namespace po = boost::program_options;
+  po::options_description desc( "Options" );
+  po::variables_map args;
+
+  desc.add_options()
+    ( "help,h",     "Print help message" )
+    ( "ai",         "Let NEAT AI play the game" )
+    ( "nop_gene",   "Use ai/mario_genes genome as is (no population creation)" )
+    ( "no_log",     "Do not log current session" );
+
+  po::store( po::parse_command_line( argc, argv, desc ), args );
+
+  if ( args.count( "help" ) ) {
+    std::cout << desc;
+    return EXIT_SUCCESS;
+  }
+  if ( args.count( "ai" ) )
+    use_ai = true;
+  if ( args.count( "nop_gene" ) )
+    nop_gene = true;
+  if ( args.count( "no_log" ) )
+    no_log = true;
+
 
   // Create window
   sf::RenderWindow window(sf::VideoMode(1024, 512), "NEAT Ninja Mario");
@@ -34,12 +52,11 @@ int main(int argc, char** argv)
   font::FontManager::init("resources/fonts/");
 
   // Game loop
-  models::Game game {&window, window.getSize(), std::get<0>(args), std::get<1>(args)};
+  models::Game game { &window, window.getSize(), use_ai, true };
 
-  if ( std::get<0>( args ) ) {
-    std::cerr << "[+ 0] (main) game.startAI()" << std::endl;
-    game.startAI();
-  }
+  std::cerr << "[+ 0] (main) Starting game with options ai: " << use_ai << ", nop_gene: " << nop_gene << ", no_log: " << no_log << std::endl;
+  if ( use_ai )
+    game.startAI( no_log, nop_gene );
   else
     game.start();
 

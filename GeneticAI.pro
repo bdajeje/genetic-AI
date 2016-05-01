@@ -28,7 +28,7 @@ SOURCES += main.cpp \
     ai/neat/trait.cpp
 
 LIBS += -lsfml-graphics -lsfml-window -lsfml-system \
-        -lboost_filesystem -lboost_system
+        -lboost_filesystem -lboost_system -lboost_program_options
 
 HEADERS += \
     managers/fontmanager.hpp \

@@ -27,7 +27,7 @@ class Game final
     Game(sf::RenderWindow* window, sf::Vector2u game_size, bool use_ai, bool allow_draw);
 
     void start();
-    void startAI();
+    void startAI( bool no_log, bool nop_genome );
 
   private:
 
