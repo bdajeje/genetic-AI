@@ -6,7 +6,7 @@
 - **Contexte:** Présenté à Pr. Éric Beaudry dans le cours INF4230 (Hiver 2016)
 - **Équipe:** #3
 - **Membres:** Alexandre Cayer-Boucher et John Béjot
-- **Date:** 4 mai 2016
+- **Date:** 3 mai 2016
 
 ---
 
