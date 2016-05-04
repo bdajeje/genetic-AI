@@ -2,10 +2,14 @@
 
 ### Équipe
 
-> **Cours:** Intelligence Artificielle (INF4230) - TP3
-> **Prof:** Eric Beaudry
-> **Élève1:** Alexandre Cayer-Boucher - Caya10119000 - cayer-boucher.alexandre@courrier.uqam.ca
-> **Élève2:** John Béjot - BEJJ20119308 - bejot.john@courrier.uqam.ca
+- **Cours:** Intelligence Artificielle (INF4230) - TP3
+- **Prof:** Eric Beaudry
+- **Élève1:** Alexandre Cayer-Boucher - CAYA10119000 - cayer-boucher.alexandre@courrier.uqam.ca
+- **Élève2:** John Béjot - BEJJ20119308 - bejot.john@courrier.uqam.ca
+
+### Remarque
+
+Écrit en C++, avec des éléments de la norme C++11, ce jeu est fonctionnel principalement sur Linux. Une tentative de compilation peut-être faite sur Windows, à la discrétion de l'usager.
 
 
 ### Compilation
@@ -39,7 +43,7 @@ Les fichiers utilisés seront expliqués ultérieurement.
 
 Cette commande va créer un dossier dans `ai/log-X` où X est la date et l'heure d'exécution du programme. Toutes les `NEAT::print_every` générations, un fichier texte sera créé dans le dossier de log avec les génotypes des membres de la population investiguée. La population initiale est créée à partir de celle lue dans `ai/mario_genes`
 
-3. Rendus avec plusieurs génotypes, il est possible de lancer l'IA avec un réseau neuronal particulier. Pour ce faire, il faut remplacer le contenu du fichier `ai/mario_genes` par le génotype souhaité. Si l'on souhaite créer une population à partir de génotype, la commande **2** fera l'affaire, mais si l'on veut que l'IA utilise ce génotype sans le modifier, alors il faut rajouter une option:
+3. Rendus avec plusieurs génotypes, il est possible de lancer l'IA avec un réseau neuronal particulier. Pour ce faire, il faut remplacer le contenu du fichier `ai/mario_genes` par le génotype souhaité. Si l'on souhaite créer une population à partir du génotype, la commande **2** fera l'affaire, mais si l'on veut que l'IA utilise ce génotype sans le modifier, alors il faut rajouter une option:
 
 `./GeneticAI --ai --nop_gene`
 
@@ -59,7 +63,7 @@ Il y a 2 fichiers de configuration:
 
 Le premier, `mario_params.ne`, contient des paramètres qu'utilisera NEAT pour faire évoluer les populations. Le fichier source `ai/neat/neat.h` contient des commentaires pour chacune des valeurs. Pour d'amples explications, se référer au livre des créateurs de NEAT: Kenneth O. Stanley & Risto Miikkulainen - "Competitive Coevolution through Evolutionary Complexification", 2004.
 
-Le deuxième fichier, `mario_genes`, contient le génotype initial qui sera utilisé durant la session. Par défault, ce génotype représente une topologie minimale, et le programme s'en sert pour créer une population initiale. Il est cependant possible de remplacer ce génotype par un autre, pour créer une population intiale "plus avancée" ou juste pour utiliser un réseau neuronal particulier. La signification du format peut être trouvée dans le "NEAT Software Doc File", écrit par Kenneth O. Stanley en 2001.
+Le deuxième fichier, `mario_genes`, contient le génotype initial qui sera utilisé durant la session. Par défault, ce génotype représente une topologie minimale, et le programme s'en sert pour créer une population initiale. Il est cependant possible de remplacer ce génotype par un autre, pour créer une population initiale "plus avancée" ou juste pour utiliser un réseau neuronal particulier. La signification du format peut être trouvée dans le "NEAT Software Doc File", écrit par Kenneth O. Stanley en 2001.
 
 #### Code
 
@@ -72,9 +76,9 @@ Tel que mentionné dans les autres documents, très peu de code fut écrit. Les 
 
 Tout le reste du code provient de parties tierces, dont notamment:
 
-- la librairie Boost, pour simplifier le C++
-- la librairie SFML, pour le rendu graphique
-- la librairie NEAT, noyau dur de notre AI
+- la librairie [Boost](http://www.boost.org/users/history/version_1_60_0.html) v1.60, à inclure dans le dossier racine du projet, pour simplifier le C++
+- la librairie [SFML](http://www.sfml-dev.org/download/sfml/2.3.2/) v2.3.2, à installer globalement, pour le rendu graphique
+- la librairie [NEAT](http://nn.cs.utexas.edu/?neat-c) v1.2.1 edition 2010, à installer dans le dossier `ai/`, noyau dur de notre AI
 - les fichiers du jeu, écrit par Jérémy Goussé, un ami à John
 
 
